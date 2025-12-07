@@ -15,15 +15,7 @@ st.title("📈 Linear vs Exponential Growth Explorer")
 
 st.markdown(
     """
-This app lets you compare a **linear function**  
-\\[
-y_{\\text{linear}} = a_{\\text{lin}} + b_{\\text{lin}} x
-\\]
-and an **exponential function**  
-\\[
-y_{\\text{exp}} = a_{\\text{exp}} \\cdot b_{\\text{exp}}^x
-\\]
-where we interpret \(b_{\\text{exp}} = 1 + r\) with \(r\) the growth/decay rate per period.
+This app lets you compare a **linear function** and an **exponential function**  where we interpret the growth/decay rate per period.
 
 Use the sliders on the left to change the parameters and see how the curves behave over time.
 """
@@ -37,19 +29,19 @@ st.sidebar.header("🔧 Parameters")
 # X-range settings
 time_max = st.sidebar.slider(
     "Time range (max x)",
-    min_value=5.0,
-    max_value=50.0,
+    min_value=0.0,
+    max_value=100.0,
     value=20.0,
     step=1.0
 )
 
-num_points = st.sidebar.slider(
-    "Number of points (smoothness)",
-    min_value=50,
-    max_value=1000,
-    value=400,
-    step=50
-)
+#num_points = st.sidebar.slider(
+#    "Number of points (smoothness)",
+#    min_value=50,
+#    max_value=1000,
+#    value=400,
+#    step=50
+#)
 
 st.sidebar.markdown("---")
 
@@ -63,7 +55,7 @@ same_rate = st.sidebar.checkbox(
 )
 
 st.sidebar.markdown("### Initial value a (at x = 0)")
-a_min, a_max = 0.0, 100_000.0
+a_min, a_max = -10_000.0, 10_000.0
 
 if same_a:
     a_shared = st.sidebar.slider(
@@ -71,7 +63,7 @@ if same_a:
         min_value=a_min,
         max_value=a_max,
         value=40_000.0,
-        step=1_000.0
+        step=10.0
     )
     a_linear = a_shared
     a_exp = a_shared
@@ -81,17 +73,17 @@ else:
         min_value=a_min,
         max_value=a_max,
         value=40_000.0,
-        step=1_000.0
+        step=10.0
     )
     a_exp = st.sidebar.slider(
         "a_exp (for exponential function)",
         min_value=a_min,
         max_value=a_max,
         value=40_000.0,
-        step=1_000.0
+        step=10.0
     )
 
-st.sidebar.markdown("### Rate / slope b")
+st.sidebar.markdown("### Slope / Rate b")
 
 # Linear: absolute increase per period
 b_lin = st.sidebar.slider(
@@ -99,7 +91,7 @@ b_lin = st.sidebar.slider(
     min_value=-10_000.0,
     max_value=10_000.0,
     value=2_000.0,
-    step=500.0,
+    step=10.0,
     help="This is the constant amount added (or subtracted) each period."
 )
 
@@ -107,8 +99,8 @@ b_lin = st.sidebar.slider(
 if same_rate:
     rate_pct_shared = st.sidebar.slider(
         "Growth/decay rate for exponential (%)",
-        min_value=-50.0,
-        max_value=50.0,
+        min_value=-100.0,
+        max_value=100.0,
         value=5.0,
         step=0.5,
         help="Interpreted as b_exp = 1 + rate/100."
@@ -117,8 +109,8 @@ if same_rate:
 else:
     rate_exp_pct = st.sidebar.slider(
         "Exponential growth/decay rate (%)",
-        min_value=-50.0,
-        max_value=50.0,
+        min_value=-100.0,
+        max_value=100.0,
         value=5.0,
         step=0.5,
         help="Interpreted as b_exp = 1 + rate/100."
@@ -134,7 +126,7 @@ st.sidebar.markdown(
 # ------------------------
 # COMPUTE DATA
 # ------------------------
-x = np.linspace(0, time_max, int(num_points))
+x = np.linspace(0, time_max, int(400))
 
 y_linear = a_linear + b_lin * x
 y_exp = a_exp * (b_exp ** x)
